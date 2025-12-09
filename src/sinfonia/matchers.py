@@ -146,18 +146,17 @@ def match_carbon_aware(
     cloudlets: list[Cloudlet],
 ) -> Iterator[Cloudlet]:
     """Yields cloudlet recommendations based on lowest carbon intensity level"""
-    CI_KEY = 'carbon_intensity_gco2_kwh'
+    CI_KEY = "carbon_intensity_gco2_kwh"
 
-    # Filter cloudlets with carbon intensity data
-    carbon_cloudlets = filter(
-        lambda c: CI_KEY in c.resources,
-        cloudlets
+    carbon_cloudlets = sorted(
+        [c for c in cloudlets if CI_KEY in c.resources],
+        key=lambda c: c.resources[CI_KEY],
     )
 
-    # Sort by lowest carbon intensity
-    carbon_cloudlets = sorted(carbon_cloudlets, lambda c: c.resources[CI_KEY])
+    for cloudlet in carbon_cloudlets:
+        yield cloudlet
 
-    # TODO: We are yielding every available cloudlets, should we be more precise here?
+    # yield any remaining cloudlets without carbon data
     for cloudlet in cloudlets:
-        cloudlets.remove(cloudlet)
-        yield cloudlet    
+        if cloudlet not in carbon_cloudlets:
+            yield cloudlet

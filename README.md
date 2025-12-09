@@ -257,3 +257,53 @@ This repository is licensed under the MIT License. See the LICENSE file for deta
 For questions, issues, or contributions, please contact:
 - **Li (Lilly) Wu** — [liwu@umass.edu](mailto:liwu@umass.edu)
 - **Khai Nguyen** — [tuankhai2k@gmail.com](mailto:tuankhai2k@gmail.com)  
+
+## Operational Runbook (k3s + CarbonEdge)
+
+These are the steps we used to get k3s and CarbonEdge running end‑to‑end on the lab host:
+
+1) Python/Poetry tooling  
+   - Activate your venv and install Poetry + dev deps:  
+     `python -m pip install "poetry==2.1.3"`  
+     `poetry install --with dev`  
+   - Install Ansible (when using Python 3.11, pip): `python -m pip install 'ansible>=9.2,<10'`  
+   - Install k8s client for Ansible modules: `python -m pip install 'kubernetes>=12,<29'`
+
+2) Ansible prerequisites  
+   - Install distro package to satisfy PEP 668: `sudo apt-get install -y python3-openshift`  
+   - Ensure your sudo password and vault password are available; run playbooks with `-K` (sudo) and `-J` (ask‑vault‑pass).
+
+3) Fix k3s resource limits (avoid “too many open files”)  
+   - Create `/etc/systemd/system/k3s.service.d/override.conf` with:  
+     ```
+     [Service]
+     LimitNOFILE=1048576
+     LimitNPROC=1048576
+     ```  
+   - Reload and restart k3s: `sudo systemctl daemon-reload && sudo systemctl restart k3s`
+
+4) Deploy CarbonEdge via Ansible  
+   - Use in‑cluster service URLs in `deploy-tier2/deploy.yml`:  
+     `sinfonia_tier1_url: http://carbonedge-tier1.default.svc.cluster.local:5000`  
+     `sinfonia_tier2_url: http://carbonedge-tier2.default.svc.cluster.local:5001`  
+   - Run: `ansible-playbook deploy-tier2/deploy.yml -J -i deploy-tier2/inv/inv.yaml -K`
+
+5) Runtime checks  
+   - Verify cluster: `sudo k3s kubectl get nodes` and `sudo k3s kubectl get pods -A`  
+   - Confirm Tier1/Tier2 services:  
+     `sudo k3s kubectl get svc -A | grep carbonedge`  
+     `curl -s http://127.0.0.1:30050/api/v1/cloudlets/` (should list Tier2)
+
+6) Deploy a recipe (example helloworld)  
+   - Generate a WireGuard pubkey and URL‑encode it:  
+     ```
+     wg genkey | tee /tmp/wg.key | wg pubkey > /tmp/wg.pub
+     PUB=$(python3 -c "import urllib.parse;print(urllib.parse.quote(open('/tmp/wg.pub').read().strip(), safe=''))")
+     ```  
+   - Call Tier1:  
+     `curl -s -X POST "http://127.0.0.1:30050/api/v1/deploy/00000000-0000-0000-0000-000000000000/${PUB}"`
+
+7) k3s reset (if control plane hangs)  
+   - Uninstall: `sudo /usr/local/bin/k3s-uninstall.sh`  
+   - Clean state: `sudo rm -rf /etc/rancher/k3s /var/lib/rancher/k3s /run/k3s`  
+   - Reinstall via installer: `sudo sh deploy-tier2/files/k3s-installer.sh`

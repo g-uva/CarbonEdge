@@ -71,7 +71,7 @@ class DeployView(MethodView):
             requested = DeploymentRecipe.from_uuid(uuid)
             client_info = ClientInfo.from_request(application_key)
         except ValueError:
-            raise ProblemException(400, "Bad Request", "Incorrectly formatted request")
+            raise ProblemException(status=400, title="Bad Request", detail="Incorrectly formatted request")
 
         matchers = current_app.config["match_functions"]
         available = list(current_app.config["cloudlets"].values())
@@ -100,7 +100,7 @@ class DeployView(MethodView):
 
         # all requests failed?
         if not results:
-            raise ProblemException(500, "Error", "Something went wrong")
+            raise ProblemException(status=500, title="Error", detail="Something went wrong")
 
         return results
 
