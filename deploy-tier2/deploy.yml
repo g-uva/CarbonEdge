@@ -50,7 +50,7 @@
     carbonedge_tier1_carbon_log_folder_path: "~/logs"
 
     # CarbonEdge-Tier2 common variables across all deployments
-    sinfonia_tier1_url: "http://192.168.245.190:30051"  # CarbonEdge-Tier1 is always configured to run on port 30050 via Helm
+    sinfonia_tier1_url: "http://192.168.245.190:30050"  # CarbonEdge-Tier1 is always configured to run on port 30050 via Helm
     carbonedge_tier2_carbon_intensity_query_mode: "REALTIME"
     enable_ufw: false
     override_resolv_conf: true
@@ -75,7 +75,7 @@
   - import_tasks: tasks/k3s.yml
   - import_tasks: tasks/kube-prometheus-stack.yml
   - import_tasks: tasks/kilo.yml
-  - import_tasks: tasks/nvidia_gpu_operator.yml
+  # - import_tasks: tasks/nvidia_gpu_operator.yml
   - import_tasks: tasks/kubevirt.yml
 
   #- name: configure storage...

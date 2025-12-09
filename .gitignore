@@ -12,6 +12,15 @@ __pycache__/
 *.swp
 *.env
 
+# Virtual environments
+/.venv/
+/venv/
+/bin/
+/include/
+/lib/
+/lib64
+/pyvenv.cfg
+
 logs/
 deploy-tier2/k3s-installer.sh
 deploy-tier2/kilo-crds.yaml
