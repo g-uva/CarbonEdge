@@ -1,6 +1,11 @@
 # SPDX-FileCopyrightText: 2021-2022 Carnegie Mellon University
 # SPDX-License-Identifier: MIT
 ---
+- name: ensure k3s kubeconfig is readable
+  ansible.builtin.file:
+    path: /etc/rancher/k3s/k3s.yaml
+    mode: "0644"
+
 - name: add monitoring namespace
   kubernetes.core.k8s:
     kubeconfig: /etc/rancher/k3s/k3s.yaml

@@ -75,7 +75,7 @@
 
 - name: wait for k3s to finish initializing
   ansible.builtin.command:
-    cmd: k3s kubectl wait --for=condition=Ready nodes --all --timeout=900s
+    cmd: sudo k3s kubectl wait --for=condition=Ready nodes --all --timeout=900s
   retries: 6
   delay: 10
   changed_when: False

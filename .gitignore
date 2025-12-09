@@ -40,3 +40,4 @@ poetry.lock
 
 carbonedge*.yaml
 deploy-tier2/inv/secrets.yaml
+share/

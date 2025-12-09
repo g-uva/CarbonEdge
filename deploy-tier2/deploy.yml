@@ -9,9 +9,8 @@
 # Optionally set the SINFONIA_TIER1_URL environment variable if you
 # want to register with a sinfonia-tier1 instance.
 #  i.e. SINFONIA_TIER1_URL=https://cloudlet.mydomain.org
----
 - hosts: localhost  # This is always localhost
-  become: true
+  become: false
   gather_facts: false
   no_log: false
 
@@ -23,11 +22,12 @@
 
   - name: update local copy of deployment files
     ansible.builtin.command:
-      cmd: poetry run poe update-deployment-files
+      # cmd: poetry run poe update-deployment-files
+      cmd: /home/goncalo/CarbonEdge/bin/poetry run poe update-deployment-files
       creates: "files/kilo-wg-exporter.yaml"
 
 - hosts: localhost  # Change to Ansible host group ('tier2hosts') for deployment via Ansible inventory file
-  remote_user: khainguyen  # Change to your user
+  remote_user: goncalo  # Change to your user
   become_user: root
   become: true
 

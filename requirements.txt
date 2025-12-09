@@ -1,0 +1,31 @@
+# Runtime dependencies as documented in README (via pyproject)
+ansible>=9.2.0,<10.0.0
+attrs>=21.3.0
+connexion[flask,swagger-ui,uvicorn]>=3.2.0,<4.0.0
+dependency-injector>=4.41.0,<5.0.0
+flask>=3.1.1,<4.0.0
+Flask-APScheduler>=1.13.1,<2.0.0
+Flask-Executor>=1.0.0,<2.0.0
+geopy>=2.2.0,<3.0.0
+importlib-metadata>=4.12.0,<5.0.0
+jsonschema-spec>=0.2.4,<0.3.0
+maxminddb>=2.2.0,<3.0.0
+maxminddb-geolite2>=2018.703,<2019.0
+pendulum>=3.1.0,<4.0.0
+plumbum>=1.7.2,<2.0.0
+prance[osv]>=25.4.8.0,<26.0.0
+py-rapl @ git+https://github.com/wkatsak/py-rapl.git
+pydantic>=2.11.7,<3.0.0
+pydantic-settings>=2.10.0,<3.0.0
+pyrapl>=0.2.3.1,<0.3.0
+pymongo>=4.6.2,<5.0.0
+pytest>=8.4.0,<9.0.0
+python-dotenv>=1.0.1,<2.0.0
+randomname>=0.1.5,<0.2.0
+requests>=2.26.0,<3.0.0
+typer[all]>=0.16.0,<0.17.0
+wireguard-tools>=0.4.0,<0.5.0
+yarl>=1.7.2,<2.0.0
+zeroconf>=0.38.7,<0.39.0
+toml==0.10.2
+poetry==2.1.3
