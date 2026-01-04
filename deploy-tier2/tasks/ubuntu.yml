@@ -26,9 +26,8 @@
     state: present
 
 - name: install dependencies for ansible.kubernetes
-  ansible.builtin.pip:
-    executable: pip3
-    name: openshift
+  ansible.builtin.apt:
+    name: python3-openshift
     state: present
 
 # Prevents polluting global Python package namespace
